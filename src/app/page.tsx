@@ -45,6 +45,13 @@ export default function Home() {
           cards
         </a>
       </div>
+      <div className="mt-8">
+        <img
+          src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3U0Y29qYmh6ZXVvampjNHRwMXQ0Y2ZkcGpjMXRwamVkemVsODFvbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/rIbMIsLfwNosh82FSS/giphy.gif"
+          alt="dancing dog"
+          className="rounded-lg"
+        />
+      </div>
     </main>
   );
 }
