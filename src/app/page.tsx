@@ -1,6 +1,42 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+
 export default function Home() {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const mousePos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "l" || e.key === "L") {
+        setIsFollowing(true);
+        setPosition({ x: mousePos.current.x, y: mousePos.current.y });
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+      if (isFollowing) {
+        setPosition({ x: e.clientX, y: e.clientY });
+      }
+    };
+
+    window.addEventListener("keypress", handleKeyPress);
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isFollowing]);
+
   return (
-    <main className="min-h-screen bg-black flex flex-col items-center justify-center">
+    <main
+      className={`min-h-screen bg-black flex flex-col items-center justify-center ${
+        isFollowing ? "cursor-none" : ""
+      }`}
+    >
       <div className="text-white text-4xl font-bold">
         Christian O'Connor
       </div>
@@ -45,13 +81,28 @@ export default function Home() {
           cards
         </a>
       </div>
+
       <div className="mt-8 flex justify-center">
         <img
           src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3U0Y29qYmh6ZXVvampjNHRwMXQ0Y2ZkcGpjMXRwamVkemVsODFvbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/rIbMIsLfwNosh82FSS/giphy.gif"
           alt="dancing dog"
           className="rounded-lg w-[20%]"
+          style={{ visibility: isFollowing ? "hidden" : "visible" }}
         />
       </div>
+
+      {isFollowing && (
+        <img
+          src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3U0Y29qYmh6ZXVvampjNHRwMXQ0Y2ZkcGpjMXRwamVkemVsODFvbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/rIbMIsLfwNosh82FSS/giphy.gif"
+          alt="dancing dog"
+          className="rounded-lg w-[40px] pointer-events-none fixed"
+          style={{
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            transform: "translate(-50%, -50%) scale(2)",
+          }}
+        />
+      )}
     </main>
   );
 }
